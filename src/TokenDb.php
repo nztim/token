@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TokenDb extends Model implements Token
 {
-    protected $table = 'tokens';
+    protected $table = 'tokens-pkg';
 
     // Token implementation
 
