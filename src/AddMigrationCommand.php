@@ -11,7 +11,7 @@ class AddMigrationCommand extends Command
     public function handle()
     {
         // Create a new migration
-        $name = 'create_token_pkg_table';
+        $name = 'create_tokens_pkg_table';
         $ds = DIRECTORY_SEPARATOR;
         $path = database_path().$ds.'migrations';
         $filename = $this->laravel['migration.creator']->create($name, $path);
