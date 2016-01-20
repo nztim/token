@@ -1,0 +1,23 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateTokensPkgTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('tokens-pkg', function(Blueprint $table) {
+            $table->increments('id');
+            $table->string('type')->nullable()->index();
+            $table->integer('ref')->unsigned()->index();
+            $table->string('code')->unique();
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::drop('tokens');
+    }
+}
