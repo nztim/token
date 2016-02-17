@@ -18,9 +18,18 @@ class TokenRepo
         $token = $this->model->newInstance();
         $token->type = $type;
         $token->ref = $ref;
-        $token->code = str_random(40);
+        $token->code = $this->uniqueCode();
         $this->persist($token);
         return $token;
+    }
+
+    protected function uniqueCode() : string
+    {
+        $code = str_random(40);
+        while (!is_null($this->model->whereCode($code)->first())) {
+            $code = str_random(40);
+        }
+        return $code;
     }
 
     protected function persist(TokenDb $token)
