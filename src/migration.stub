@@ -9,9 +9,10 @@ class CreateTokensPkgTable extends Migration
     {
         Schema::create('tokens-pkg', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('type')->nullable()->index();
+            $table->string('type')->index();
             $table->integer('ref')->unsigned()->index();
             $table->string('code')->unique();
+            $table->integer('expires')->nullable()->unsigned();
             $table->timestamps();
         });
     }

@@ -4,7 +4,7 @@ use Illuminate\Console\Command;
 
 class AddMigrationCommand extends Command
 {
-    protected $name = 'token:migration';
+    protected $name = 'token-pkg:migration';
 
     protected $description = 'Add database migration for NZTim\Token';
 

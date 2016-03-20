@@ -2,27 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class TokenDb extends Model implements Token
+class TokenDb extends Model
 {
     protected $table = 'tokens-pkg';
-
-    // Token implementation
-
-    public function code() : string
-    {
-        return $this->code;
-    }
-
-    public function type() : string
-    {
-        if (is_null($this->type)) {
-            return '';
-        }
-        return $this->type;
-    }
-
-    public function ref() : int
-    {
-        return $this->ref;
-    }
 }

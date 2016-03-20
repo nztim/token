@@ -5,22 +5,22 @@ use Carbon\Carbon;
 class TokenRepo
 {
     protected $model;
-    protected $timeout;
 
-    public function __construct(TokenDb $model, int $timeout = 1440) // 60mins * 24h
+    public function __construct(TokenDb $model)
     {
         $this->model = $model;
-        $this->timeout = $timeout;
     }
 
-    public function new(int $ref, string $type = null) : Token
+    public function new(int $ref, string $type, int $expires = null) : string
     {
+        /** @var TokenDb $token */
         $token = $this->model->newInstance();
         $token->type = $type;
         $token->ref = $ref;
         $token->code = $this->uniqueCode();
-        $this->persist($token);
-        return $token;
+        $token->expires = $expires;
+        $token->save();
+        return $token->code;
     }
 
     protected function uniqueCode() : string
@@ -32,33 +32,40 @@ class TokenRepo
         return $code;
     }
 
-    protected function persist(TokenDb $token)
-    {
-        $token->save();
-    }
-
     /**
      * @param string $code
-     * @param string|null $type
-     * @return Token|null
+     * @param string $type
+     * @return int|null
      */
-    public function find(string $code, string $type = null)
+    public function find(string $code, string $type)
     {
         $this->expire();
-        if (is_null($type)) {
-            return $this->model->whereCode($code)->first();
+        $token = $this->model->whereCode($code)->whereType($type)->first();
+        if (is_null($token)) {
+            return null;
         }
-        return $this->model->whereCode($code)->whereType($type)->first();
+        return $token->ref;
     }
 
     protected function expire()
     {
-        $this->model->where('created_at', '<', Carbon::now()->subMinutes($this->timeout))->delete();
+        $tokens = $this->model->all();
+        foreach($tokens as $token) {
+            if (is_null($token->expires)) {
+                continue;
+            }
+            if(Carbon::now()->subMinutes($token->expires)->gt($token->created_at)) {
+                $token->delete();
+            }
+        }
     }
 
-    public function remove(Token $token)
+    public function remove(string $code, string $type)
     {
         /** @var TokenDb $token */
-        $token->delete();
+        $token = $this->model->whereCode($code)->whereType($type)->first();
+        if ($token) {
+            $token->delete();
+        }
     }
 }
