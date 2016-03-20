@@ -6,7 +6,7 @@ Manages random tokens for password resets and other one-time actions
 
   * Add the service provider to `config/app.php`:
     * `NZTim\Token\TokenServiceProvider::class,`
-  * Run `php artisan token:migration` then `php artisan migrate` to add the Token database table
+  * Run `php artisan token-pkg:migration` then `php artisan migrate` to add the Token database table
 
 ### Usage
 
