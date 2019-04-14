@@ -1,6 +1,7 @@
 <?php namespace NZTim\Token;
 
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class TokenRepo
 {
@@ -25,9 +26,9 @@ class TokenRepo
 
     protected function uniqueCode() : string
     {
-        $code = str_random(40);
+        $code = Str::random(40);
         while (!is_null($this->model->whereCode($code)->first())) {
-            $code = str_random(40);
+            $code = Str::random(40);
         }
         return $code;
     }
